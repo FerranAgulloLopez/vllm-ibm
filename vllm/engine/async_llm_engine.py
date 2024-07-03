@@ -289,6 +289,7 @@ class _AsyncLLMEngine(LLMEngine):
         arrival_time: Optional[float] = None,
         lora_request: Optional[LoRARequest] = None,
         trace_headers: Optional[Dict[str, str]] = None,
+        sched_metadata: Optional[Dict[str, Optional[int]]] = None,
     ) -> None:
         if lora_request is not None and not self.lora_config:
             raise ValueError(f"Got lora_request {lora_request} but LoRA is "
@@ -306,6 +307,7 @@ class _AsyncLLMEngine(LLMEngine):
             arrival_time=arrival_time,
             lora_request=lora_request,
             trace_headers=trace_headers,
+            sched_metadata=sched_metadata,
         )
 
     async def check_health_async(self) -> None:
@@ -562,6 +564,7 @@ class AsyncLLMEngine:
         arrival_time: Optional[float] = None,
         lora_request: Optional[LoRARequest] = None,
         trace_headers: Optional[Dict[str, str]] = None,
+        sched_metadata: Optional[Dict[str, Optional[int]]] = None,
     ) -> AsyncStream:
         if self.log_requests:
             if isinstance(inputs, str):
@@ -604,6 +607,7 @@ class AsyncLLMEngine:
             arrival_time=arrival_time,
             lora_request=lora_request,
             trace_headers=trace_headers,
+            sched_metadata=sched_metadata,
         )
 
         return stream
@@ -615,6 +619,7 @@ class AsyncLLMEngine:
         request_id: str,
         lora_request: Optional[LoRARequest] = None,
         trace_headers: Optional[Dict[str, str]] = None,
+        sched_metadata: Optional[Dict[str, Optional[int]]] = None,
     ) -> AsyncIterator[RequestOutput]:
         """Generate outputs for a request.
 
@@ -630,6 +635,7 @@ class AsyncLLMEngine:
             request_id: The unique id of the request.
             lora_request: LoRA request to use for generation, if any.
             trace_headers: OpenTelemetry trace headers.
+            sched_metadata: Additional metadata for scheduling policies
 
         Yields:
             The output `RequestOutput` objects from the LLMEngine
@@ -684,6 +690,7 @@ class AsyncLLMEngine:
                 sampling_params,
                 lora_request=lora_request,
                 trace_headers=trace_headers,
+                sched_metadata=sched_metadata,
         ):
             yield LLMEngine.validate_output(output, RequestOutput)
 
@@ -772,6 +779,7 @@ class AsyncLLMEngine:
         *,
         lora_request: Optional[LoRARequest] = None,
         trace_headers: Optional[Dict[str, str]] = None,
+        sched_metadata: Optional[Dict[str, Optional[int]]] = None,
     ) -> AsyncIterator[Union[RequestOutput, EmbeddingRequestOutput]]:
         """Common logic to process requests with SamplingParams or
         PoolingParams."""
@@ -784,6 +792,7 @@ class AsyncLLMEngine:
             arrival_time=arrival_time,
             lora_request=lora_request,
             trace_headers=trace_headers,
+            sched_metadata=sched_metadata,
         )
 
         try:

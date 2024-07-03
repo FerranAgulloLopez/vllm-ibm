@@ -283,6 +283,7 @@ class OpenAIServingChat(OpenAIServing):
             request_id,
             lora_request,
             trace_headers=trace_headers,
+            sched_metadata=request.sched_metadata,
         )
         # Streaming response
         if request.stream:

@@ -229,6 +229,10 @@ class ChatCompletionRequest(OpenAIBaseModel):
 
     # doc: end-chat-completion-extra-params
 
+    # doc: begin-other-extra-params
+    sched_metadata: Optional[Dict[str, Optional[int]]] = None
+    # doc: end-other-extra-params
+
     def to_sampling_params(self) -> SamplingParams:
         # We now allow logprobs being true without top_logrobs.
 
@@ -413,6 +417,10 @@ class CompletionRequest(OpenAIBaseModel):
             "for guided json decoding."))
 
     # doc: end-completion-extra-params
+
+    # doc: begin-other-extra-params
+    sched_metadata: Optional[Dict[str, Optional[int]]] = None
+    # doc: end-other-extra-params
 
     def to_sampling_params(self):
         echo_without_generation = self.echo and self.max_tokens == 0

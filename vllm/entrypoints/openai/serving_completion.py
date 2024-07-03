@@ -144,6 +144,7 @@ class OpenAIServingCompletion(OpenAIServing):
                     f"{request_id}-{i}",
                     lora_request=lora_request,
                     trace_headers=trace_headers,
+                    sched_metadata=request.sched_metadata,
                 )
 
                 generators.append(generator)
